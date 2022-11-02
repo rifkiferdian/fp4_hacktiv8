@@ -1,5 +1,5 @@
-Final Project 2 Hacktiv8
-Membuat API dengan database POstgreSQL
+Final Project 4 Hacktiv8
+Membuat Unit Testing dengan Jest & Supertest
 
 🌱 Kelompok 3
 
