@@ -4,9 +4,11 @@
   "description": "final project 2 hacktiv8",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test npx jest --runInBand --forceExit",
     "start-dev": "nodemon app",
-    "start:migrate:up": "npx sequelize db:migrate && node app"
+    "start:migrate:up": "npx sequelize db:migrate && node app",
+    "db:create:test": "NODE_ENV=test npx sequelize db:create",
+    "db:migrate:test": "NODE_ENV=test npx sequelize db:migrate"
   },
   "author": "",
   "license": "ISC",
