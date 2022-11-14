@@ -13,7 +13,7 @@ const authorizationUser = async (req, res, next) => {
         }
 
         if(result.id !== id_login){
-            return res.status(401).json({
+            return res.status(403).json({
                 status: 'fail',
                 message:'Access Denied...!'
             })

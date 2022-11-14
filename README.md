@@ -9,10 +9,10 @@ Membuat Unit Testing dengan Jest & Supertest
 - [x] PUT /users/:userId
 - [x] DELETE /users/:userId
 ### Task Testing PHOTOS
-- [ ] POST /photos/
-- [ ] GET /photos/
-- [ ] PUT /photos/:photoId
-- [ ] DELETE /photos/:photoId
+- [x] POST /photos/
+- [x] GET /photos/
+- [x] PUT /photos/:photoId
+- [x] DELETE /photos/:photoId
 ### Task Testing COMMENTS
 - [ ] POST /comments/
 - [ ] GET /comments/

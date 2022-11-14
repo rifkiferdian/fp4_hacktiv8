@@ -6,11 +6,17 @@ const authorizationPhoto = async (req, res, next) => {
         const id = req.params.photoId
         const result = await Photo.findByPk(id);
         if(!result) {
-            return res.status(404).json({message:'Id not found...!'})
+            return res.status(404).json({
+                status: 'fail',
+                message:'Id not found...!'
+            })
         }
 
         if(result.UserId !== id_login){
-            return res.status(401).json({message:'Access Denied...!'})
+            return res.status(403).json({
+                status: 'fail',
+                message:'Access Denied...!'
+            })
         }
         next();
     } catch (error) {

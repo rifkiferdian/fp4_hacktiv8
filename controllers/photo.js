@@ -52,7 +52,7 @@ class PhotoController {
                 },
                 returning: true,
             });
-            res.status(201).json({photo:result[1][0]});
+            res.status(200).json({photo:result[1][0]});
         } catch (error) {
             if(error.name == 'SequelizeValidationError') {
                 return res.status(422).json({
