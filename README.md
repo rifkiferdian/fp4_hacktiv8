@@ -4,10 +4,10 @@ Membuat Unit Testing dengan Jest & Supertest
 🌱 Kelompok 3
 
 ### Task Testing USERS
-- [ ] POST /users/register
-- [ ] POST /users/login
-- [ ] PUT /users/:userId
-- [ ] DELETE /users/:userId
+- [x] POST /users/register
+- [x] POST /users/login
+- [x] PUT /users/:userId
+- [x] DELETE /users/:userId
 ### Task Testing PHOTOS
 - [ ] POST /photos/
 - [ ] GET /photos/
