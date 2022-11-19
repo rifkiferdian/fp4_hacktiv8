@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: 'Comments can not be empty.'
+          msg: 'Comments cannot be empty.'
         }
       }
     }

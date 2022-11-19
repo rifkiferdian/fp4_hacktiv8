@@ -1,7 +1,7 @@
 {
   "name": "fp2",
   "version": "1.0.0",
-  "description": "final project 2 hacktiv8",
+  "description": "final project 4 hacktiv8",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test npx jest --runInBand --forceExit",
