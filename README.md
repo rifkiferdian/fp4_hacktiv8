@@ -14,12 +14,12 @@ Membuat Unit Testing dengan Jest & Supertest
 - [x] PUT /photos/:photoId
 - [x] DELETE /photos/:photoId
 ### Task Testing COMMENTS
-- [ ] POST /comments/
-- [ ] GET /comments/
-- [ ] PUT /comments/:commentId
-- [ ] DELETE /comments/:commentId
+- [x] POST /comments/
+- [x] GET /comments/
+- [x] PUT /comments/:commentId
+- [x] DELETE /comments/:commentId
 ### Task Testing SOCIALMEDIAS
-- [ ] POST /socialmedias/
-- [ ] GET /socialmedias/
-- [ ] PUT /socialmedias/:socialMediaId
-- [ ] DELETE /socialmedias/:socialMediaId
+- [x] POST /socialmedias/
+- [x] GET /socialmedias/
+- [x] PUT /socialmedias/:socialMediaId
+- [x] DELETE /socialmedias/:socialMediaId
