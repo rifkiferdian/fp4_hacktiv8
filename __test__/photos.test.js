@@ -123,7 +123,7 @@ describe('POST /photos', () => {
 })
 
 describe('GET /photos', () => {
-  it('should send response with 201 status code', done => {
+  it('should send response with 200 status code', done => {
     request(app)
       .get('/photos')
       .set('token', token)

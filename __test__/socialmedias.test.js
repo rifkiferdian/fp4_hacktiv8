@@ -22,16 +22,14 @@ const userDataUnauthozrized = {
   phone_number: 81234567890
 }
 
-const photoData = {
-  poster_image_url: "https://www.google.com",
-  title: "Foto Google",
-  caption: "Ini adalah foto google"
+const socialmediaData = {
+    name: "Google",
+    social_media_url: "https://www.google.com"
 }
   
 let token;
 let token2;
-let photoId;
-let commentId;
+let socialmediaId;
 
 beforeAll(() => {
   return request(app).post('/users/register').send(userData).then(res => {
@@ -40,9 +38,6 @@ beforeAll(() => {
       password: userData.password
     }).then(res => {
         token = res.body.token;
-        return request(app).post('/photos').set('token', token).send(photoData).then(res => {
-            photoId = res.body.id;
-        })
     });
   });
 })
@@ -56,95 +51,91 @@ beforeAll(() => {
   });
 })
 
-describe('POST /comments', () => {
+describe('POST /socialmedias', () => {
   it('should send response with 201 status code', done => {
     request(app)
-      .post('/comments')
+      .post('/socialmedias')
       .set('token', token)
-      .send({
-            PhotoId: photoId,
-            comment: "photonya Bagus"
-        })
+      .send(socialmediaData)
       .end((err, res) => {
         if (err) done(err);
-        commentId = res.body.comment.id;
+        socialmediaId = res.body.social_media.id;
         expect(res.status).toEqual(201);
         expect(typeof res.body).toEqual('object');
-        expect(res.body).toHaveProperty('comment');
-        expect(res.body.comment).toHaveProperty('id');
-        expect(res.body.comment).toHaveProperty('comment');
-        expect(res.body.comment).toHaveProperty('UserId');
-        expect(res.body.comment).toHaveProperty('PhotoId');
-        expect(res.body.comment.comment).toEqual("photonya Bagus");
-        expect(res.body.comment.PhotoId).toEqual(photoId);
+        expect(res.body).toHaveProperty('social_media');
+        expect(res.body.social_media).toHaveProperty('id');
+        expect(res.body.social_media).toHaveProperty('name');
+        expect(res.body.social_media).toHaveProperty('social_media_url');
+        expect(res.body.social_media).toHaveProperty('UserId');
+        expect(res.body.social_media.name).toEqual(socialmediaData.name);
+        expect(res.body.social_media.social_media_url).toEqual(socialmediaData.social_media_url);
         done();
       });
   });
 
-  it('should send response with 422 status code, because comment not empty', done => {
+  it('should send response with 422 status code, because name not empty', done => {
     request(app)
-      .post('/comments')
+      .post('/socialmedias')
       .set('token', token)
       .send({
-        PhotoId: photoId,
-        comment: '',
-      })
+            name: "",
+            social_media_url: "https://www.google.com"
+        })
       .end((err, res) => {
         if (err) done(err);
         expect(res.status).toEqual(422);
         expect(typeof res.body).toEqual('object');
         expect(res.body).toHaveProperty('status');
         expect(res.body).toHaveProperty('errors');
-        expect(res.body.errors[0]).toEqual('Comments cannot be empty.');
+        expect(res.body.errors[0]).toEqual('name cannot be empty.');
         done();
-      });
+    });
   });
-
-  it('should send response with 500 status code, because PhotoId not empty', done => {
+  
+  it('should send response with 422 status code, because social_media_url not empty', done => {
     request(app)
-      .post('/comments')
+      .post('/socialmedias')
       .set('token', token)
       .send({
-        PhotoId: '',
-        comment: 'test comment'
-      })
+          name: "test",
+          social_media_url: ""
+        })
       .end((err, res) => {
         if (err) done(err);
-        expect(res.status).toEqual(500);
+        expect(res.status).toEqual(422);
         expect(typeof res.body).toEqual('object');
         expect(res.body).toHaveProperty('status');
-        expect(res.body).toHaveProperty('message');
-        expect(res.body.message).toEqual('Internal server error');
+        expect(res.body).toHaveProperty('errors');
+        expect(res.body.errors[0]).toEqual('social_media_url cannot be empty.');
         done();
       });
   });
 
 })
 
-describe('GET /comments', () => {
+describe('GET /socialmedias', () => {
     it('should send response with 200 status code', done => {
       request(app)
-        .get('/comments')
+        .get('/socialmedias')
         .set('token', token)
         .end((err, res) => {
           if (err) done(err);
           expect(res.status).toEqual(200);
           expect(typeof res.body).toEqual('object');
-          expect(typeof res.body.comments).toEqual('object');
-          expect(res.body.comments[0]).toHaveProperty('id');
-          expect(res.body.comments[0]).toHaveProperty('UserId');
-          expect(res.body.comments[0]).toHaveProperty('PhotoId');
-          expect(res.body.comments[0]).toHaveProperty('Photo');
-          expect(res.body.comments[0]).toHaveProperty('User');
-          expect(res.body.comments[0].PhotoId).toEqual(photoId);
-          expect(res.body.comments[0].comment).toEqual("photonya Bagus");
+          expect(typeof res.body.social_medias).toEqual('object');
+          expect(res.body.social_medias[0]).toHaveProperty('id');
+          expect(res.body.social_medias[0]).toHaveProperty('name');
+          expect(res.body.social_medias[0]).toHaveProperty('social_media_url');
+          expect(res.body.social_medias[0]).toHaveProperty('User');
+          expect(res.body.social_medias[0].name).toEqual(socialmediaData.name);
+          expect(res.body.social_medias[0].social_media_url).toEqual(socialmediaData.social_media_url);
           done();
         });
     });
   
     it('should send response with 401 status code, because token invalid', done => {
       request(app)
-        .get('/comments')
+        .get('/socialmedias')
         .set('token', 'aosdjosajdoasodjasodjsao')
         .end((err, res) => {
           if (err) done(err);
@@ -159,34 +150,36 @@ describe('GET /comments', () => {
     });
   })
 
-describe('PUT /comments/commentId', () => {
+describe('PUT /socialmedias/socialmediaId', () => {
     it('should send response with 200 status code', done => {
       request(app)
-        .put(`/comments/${commentId}`)
+        .put(`/socialmedias/${socialmediaId}`)
         .set('token', token)
         .send({
-            comment: 'photonya Jelek'
+            name: "yahoo",
+            social_media_url: "https://www.yahoo.com"
           })
         .end((err, res) => {
           if (err) done(err);
             expect(res.status).toEqual(200);
             expect(typeof res.body).toEqual('object');
-            expect(res.body).toHaveProperty('comment');
-            expect(res.body.comment).toHaveProperty('id');
-            expect(res.body.comment).toHaveProperty('comment');
-            expect(res.body.comment).toHaveProperty('UserId');
-            expect(res.body.comment).toHaveProperty('PhotoId');
-            expect(res.body.comment.comment).toEqual("photonya Jelek");
-            expect(res.body.comment.PhotoId).toEqual(photoId);
-          done();
+            expect(res.body).toHaveProperty('social_media');
+            expect(res.body.social_media).toHaveProperty('id');
+            expect(res.body.social_media).toHaveProperty('name');
+            expect(res.body.social_media).toHaveProperty('social_media_url');
+            expect(res.body.social_media).toHaveProperty('UserId');
+            expect(res.body.social_media.name).toEqual('yahoo');
+            expect(res.body.social_media.social_media_url).toEqual("https://www.yahoo.com");
+            done();
         });
     });
   
     it('should send response with 401 status code, because token invalid', done => {
       request(app)
-        .put(`/comments/${commentId}`)
+        .put(`/socialmedias/${socialmediaId}`)
         .send({
-            comment: 'photonya Jelek'
+            name: "facebook",
+            social_media_url: "https://www.facebook.com"
           })
         .set('token', 'aosdjosajdoasodjasodjsao')
         .end((err, res) => {
@@ -201,11 +194,12 @@ describe('PUT /comments/commentId', () => {
         });
     });
   
-    it('should send response with 403 status code, because ID Comment not found', done => {
+    it('should send response with 403 status code, because ID socialmedia not found', done => {
       request(app)
-        .put(`/comments/999999`)
+        .put(`/socialmedias/999999`)
         .send({
-            comment: 'photonya Jelek'
+            name: "facebook",
+            social_media_url: "https://www.facebook.com"
           })
         .set('token', token)
         .end((err, res) => {
@@ -213,17 +207,18 @@ describe('PUT /comments/commentId', () => {
           expect(res.status).toEqual(403);
           expect(typeof res.body).toEqual('object');
           expect(res.body).toHaveProperty('message');
-          expect(res.body.message).toEqual('Comment not found...!');
+          expect(res.body.message).toEqual('Social Media tidak ditemukan ...!');
           expect(typeof res.body.message).toEqual('string');
           done();
         });
     });
   
-    it('should send response with 422 status code, because Comment not empty', done => {
+    it('should send response with 422 status code, because name not empty', done => {
       request(app)
-        .put(`/comments/${commentId}`)
+        .put(`/socialmedias/${socialmediaId}`)
         .send({
-            comment: ''
+            name: "",
+            social_media_url: "https://www.facebook.com"
         })
         .set('token', token)
         .end((err, res) => {
@@ -233,16 +228,16 @@ describe('PUT /comments/commentId', () => {
           expect(res.body).toHaveProperty('status');
           expect(res.body).toHaveProperty('errors');
           expect(res.body.status).toEqual('fail');
-          expect(res.body.errors[0]).toEqual('Comments cannot be empty.');
+          expect(res.body.errors[0]).toEqual('name cannot be empty.');
           done();
         });
     });
 })
 
-describe('DELETE /comments/commentId', () => {
-    it('should send response with 403 status code, cause another user try to delete the comments', done => {
+describe('DELETE /socialmedias/socialmediaId', () => {
+    it('should send response with 403 status code, cause another user try to delete the socialmedias', done => {
       request(app)
-        .delete(`/comments/${commentId}`)
+        .delete(`/socialmedias/${socialmediaId}`)
         .set('token', token2)
         .end((err, res) => {
           if (err) done(err);
@@ -256,7 +251,7 @@ describe('DELETE /comments/commentId', () => {
   
     it('should send response with 401 status code, because token invalid', done => {
       request(app)
-        .delete(`/comments/${commentId}`)
+        .delete(`/socialmedias/${socialmediaId}`)
         .set('token', 'aosdjaoskdoaskd')
         .end((err, res) => {
           if (err) done(err);
@@ -272,28 +267,28 @@ describe('DELETE /comments/commentId', () => {
   
     it('should send response with 200 status code', done => {
       request(app)
-        .delete(`/comments/${commentId}`)
+        .delete(`/socialmedias/${socialmediaId}`)
         .set('token', token)
         .end((err, res) => {
           if (err) done(err);
           expect(res.status).toEqual(200);
           expect(typeof res.body).toEqual('object');
           expect(res.body).toHaveProperty('message');
-          expect(res.body.message).toEqual('Your comment has been successfully deleted.');
+          expect(res.body.message).toEqual('Your social media has been successfully deleted.');
           done();
         });
     });
   
-    it('should send response with 403 status code, because id comment not found', done => {
+    it('should send response with 403 status code, because socialmediaId not found', done => {
       request(app)
-        .delete(`/comments/${commentId}`)
+        .delete(`/socialmedias/${socialmediaId}`)
         .set('token', token)
         .end((err, res) => {
           if (err) done(err);
           expect(res.status).toEqual(403);
           expect(typeof res.body).toEqual('object');
           expect(res.body).toHaveProperty('message');
-          expect(res.body.message).toEqual('Comment not found...!');
+          expect(res.body.message).toEqual('Social Media tidak ditemukan ...!');
           expect(typeof res.body.message).toEqual('string');
           done();
         });
@@ -301,14 +296,7 @@ describe('DELETE /comments/commentId', () => {
 });
 
 afterAll((done) => {
-    sequelize.queryInterface.bulkDelete('Comments', {})
-        .then(() => {
-            return done();
-        })
-        .catch((err) => {
-            done(err);
-        })
-    sequelize.queryInterface.bulkDelete('Photos', {})
+    sequelize.queryInterface.bulkDelete('SocialMedia', {})
         .then(() => {
             return done();
         })
